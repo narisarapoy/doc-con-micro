@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<title>คำร้องการขอรหัส/ยกเลิกรหัส/แก้ไขเอกสาร</title>
+
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'css/ordinate.css' %}">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel=" stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=K2D|Kanit" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+		integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+</head>
+
+<body>
+	<!-- Main -->
+	<section id="main">
+		<div class="inner">
+			<section id="one" class="wrapper style4">
+				<header class="special">
+					<h2>ฝ่ายจุลชีววิทยา โรงพยาบาลจุฬาลงกรณ์</h2>
+					<p>คำร้องการขอรหัส/ยกเลิกรหัส/แก้ไขเอกสาร</p>
+				</header>
+
+				<div class="content">
+					<div align="center">
+						<ul class="actions">
+								<li><a href="/request-document" class="button special">คำขอใหม่</a></li>
+								<li><a href="/documents?type=not-complete" class="button special">รายการที่ยังไม่สมบูรณ์</a></li>
+								<li><a href="/documents?type=complete" class="button special">รายการที่สมบูรณ์แล้ว</a></li>
+								<li><a href="/documents?type=all" class="button special">ทุกรายการ</a></li>
+						</ul>
+					</div>
+
+					<h3>รายการคำขอ</h3>
+
+					<div class="table-wrapper">
+						<table class="alt">
+							<thead>
+								<tr>
+									<th>ลำดับที่</th>
+									<th>จากห้องปฏิบัติการ/ฝ่าย</th>
+									<th>เรื่อง</th>
+									<th>ความคืบหน้า(1-5)</th>
+									<th>วันที่</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for doc in request_doc_items %}
+									{% if doc.req_type != 0 %}
+									<tr>
+										<td align='center'><a href='/request-document?id={{ doc.id }}'>{{ doc.request_number_in_year }}/{{ doc.year }}</a></td>
+										<td><a href='/request-document?id={{ doc.id }}'>{{ doc.department }}</a>
+										</td>
+										{% if doc.req_type == 1 %}
+											<td>การออกหมายเลขเอกสาร</td>
+										{% elif doc.req_type == 2 %}
+											<td>การยกเลิกเอกสาร</td>
+										{% elif doc.req_type == 3 %}
+											{% if doc.req_doctype_control != '' %}
+												<td>การออกสำเนาเพื่อเป็นเอกสารควบคุม</td>
+											{% elif doc.req_doctype_uncontrol != '' %}
+												<td>การออกสำเนาเพื่อเป็นเอกสารไม่ควบคุม</td>
+											{% endif %}
+										{% elif doc.req_type == 4 %}
+											<td>การแก้ไขเอกสาร</td>
+										{% elif doc.req_type == 5 %}
+											<td>{{doc.req_other}}</td>
+										{% endif %}
+										{% if doc.progress == 5 %}
+										<td class='bggrn' align='center'>{{ doc.progress }}</td>
+										{% elif doc.progress == 1 %}
+										<td class='bghfrd' align='center'>{{ doc.progress }}</td>
+										{% else %}
+										<td class='bgred' align='center'>{{ doc.progress }}</td>
+										{% endif %}
+										<td>{{ doc.submit_date }}</td>
+									<tr>
+									{% endif %}
+								{% endfor %}
+						</table>
+					</div>
+				</div>
+			</section>
+		</div>
+		{% comment %} {% if user.is_authenticated %}
+			<a href="/logout"><div class="top_right btn btn-primary mb-3 mb-lg-0">Logout</div></a>
+		{% else %}
+			<a href="/login"><div class="top_right btn btn-primary mb-3 mb-lg-0">Login</div></a>
+		{% endif %} {% endcomment %}
+	</section>
+</BODY>
+</HTML>

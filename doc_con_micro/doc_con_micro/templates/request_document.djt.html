@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>คำร้องการขอรหัส/ยกเลิกรหัส/แก้ไขเอกสาร</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/ordinate.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel=" stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=K2D|Kanit" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+        integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+</head>
+
+
+<body>
+
+
+    <!-- Main -->
+    <section id="main">
+        <div class="inner">
+            <section id="one" class="wrapper style4">
+                <header class="special">
+                    <h2>ฝ่ายจุลชีววิทยา โรงพยาบาลจุฬาลงกรณ์</h2>
+                    <p>คำร้องการขอรหัส/ยกเลิกรหัส/แก้ไขเอกสาร</p>
+                </header>
+                <form method="post" action="/request-document/submit" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="content">
+                        <div class="row 200%">
+                            <div class="6u 12u$(medium)">
+                                &nbsp;
+                            </div>
+                            <div class="6u$ 12u$(medium)" align="right">
+                                <ul class="actions">
+                                    <li>ลำดับที่:</li>
+                                    <li><strong>{{ request_doc.id }}</strong></li>
+                                </ul>
+                                <ul class="actions">
+                                    <li>วันที่:</li>
+                                    {% if request_doc.submit_date != None %}
+                                    <li><input type="text" name="submit_date" size="15" maxlength="150"
+                                        onFocus="select()" value="{{request_doc.submit_date}}" /></li>
+                                    {% else %}
+                                    <li><input type="text" name="submit_date" size="15" maxlength="150"
+                                        onFocus="select()" value="{{current_date}}" /></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                        <hr>
+                        <ul class="actions">
+                            <li>
+                                <font color="#FF0000"></font>
+                            </li>
+                        </ul>
+                        <ul class="actions">
+                            <li>จากห้องปฏิบัติการ/ฝ่าย:</li>
+                            <li><input type="text" class="form-control" name="department" value="{{request_doc.department}}" size="35"
+                                    onFocus="select()" required></li>
+                            <li>โทร:</li>
+                            <li><input type="text" class="form-control" name="telephone" maxlength="20" value="{{request_doc.telephone}}"
+                                    onFocus="select()" required></li>
+                        </ul>
+
+                        <dl>
+                            <dt>เรื่องที่ร้องขอ</dt>
+                            <dd>
+                                <ul class="actions">
+                                    {% if request_doc.req_type == 1 %}
+                                        <li><input type="radio" id="req_type1" name="req_type" value="1" class="a" checked><label
+                                            for="req_type1">การออกหมายเลขเอกสาร</label></li>
+                                    {% else %}
+                                        <li><input type="radio" id="req_type1" name="req_type" value="1" class="a"><label
+                                            for="req_type1">การออกหมายเลขเอกสาร</label></li>
+                                    {% endif %}
+                                    <li><input type="text" name="req_new" size="50" value=""
+                                            onFocus="select()"></li>
+                                </ul>
+                                <ul class="actions">
+                                    {% if request_doc.req_type == 2 %}
+                                        <li><input type="radio" id="req_type2" name="req_type" value="2" class="a" checked><label
+                                            for="req_type2">การยกเลิกเอกสาร</label></li>
+                                    {% else %}
+                                    <li><input type="radio" id="req_type2" name="req_type" value="2" class="a"><label
+                                        for="req_type2">การยกเลิกเอกสาร</label></li>
+                                    {% endif %}
+                                    <li><input type="text" name="req_cancel" size="50" value="{{request_doc.req_cancel}}"
+                                            onFocus="select()"></li>
+                                </ul>
+                                <ul class="actions">
+                                    {% if request_doc.req_type == 3 %}
+                                        <li><input type="radio" id="req_type3" name="req_type" value="3" class="a" checked><label
+                                            for="req_type3">การออกสำเนาเพื่อเป็น</label></li>
+                                    {% else %}
+                                        <li><input type="radio" id="req_type3" name="req_type" value="3" class="a"><label
+                                            for="req_type3">การออกสำเนาเพื่อเป็น</label></li>
+                                    {% endif %}
+                                    <br>
+                                    {% if request_doc.req_doctype_control != None %}
+                                        <li style="margin-left: 50px;"><input type="radio" name="req_doctype" id="req_doctype1" value="1" class="a" checked><label
+                                            for="req_doctype1">เอกสารควบคุม</label></li>
+                                    {% else %}
+                                        <li style="margin-left: 50px;"><input type="radio" name="req_doctype" id="req_doctype1" value="1" class="a"><label
+                                            for="req_doctype1">เอกสารควบคุม</label></li>
+                                    {% endif %}
+                                    <li><input type="text" name="req_doctype_control" size="50" value="{{request_doc.req_doctype_control}}"
+                                                onFocus="select()"></li>
+                                    <br>
+                                    <br>
+                                    {% if request_doc.req_doctype_uncontrol != None %}
+                                        <li style="margin-left: 50px;"><input type="radio" name="req_doctype" id="req_doctype2" value="2" class="a" checked><label
+                                            for="req_doctype2">เอกสารไม่ควบคุม</label></li>
+                                    {% else %}
+                                        <li style="margin-left: 50px;"><input type="radio" name="req_doctype" id="req_doctype2" value="2" class="a"><label
+                                            for="req_doctype2">เอกสารไม่ควบคุม</label></li>
+                                    {% endif %}
+                                    <li><input type="text" name="req_doctype_uncontrol" size="50" value="{{request_doc.req_doctype_uncontrol}}"
+                                            onFocus="select()"></li>
+                                </ul>
+                                <ul class="actions">
+                                    {% if request_doc.req_type == 4 %}
+                                        <li><input type="radio" id="req_type4" name="req_type" value="4" class="a" checked><label
+                                            for="req_type4">การแก้ไขเอกสาร</label></li>
+                                    {% else %}
+                                        <li><input type="radio" id="req_type4" name="req_type" value="4" class="a"><label
+                                            for="req_type4">การแก้ไขเอกสาร</label></li>
+                                    {% endif %}
+                                    <li><input type="text" name="req_alter" size="50" value="{{request_doc.req_alter}}"
+                                            onFocus="select()"></li>
+                                </ul>
+                                <ul class="actions">
+                                    {% if request_doc.req_type == 5 %}
+                                        <li><input type="radio" id="req_type5" name="req_type" value="5" class="a"><label
+                                            for="req_type5">อื่นๆ</label></li>
+                                    {% else %}
+                                        <li><input type="radio" id="req_type5" name="req_type" value="5" class="a"><label
+                                            for="req_type5">อื่นๆ</label></li>
+                                    {% endif %}
+                                    <li><input type="text" name="req_other" size="50" value="{{request_doc.req_other}}"
+                                            onFocus="select()"></li>
+                                </ul>
+                            </dd>
+                        </dl>
+                        <ul class="actions">
+                            <li>เอกสารแนบ:</li>
+                            {% if request_doc.has_attached_doc == False %}
+                                <li><input type="radio" name="attached_doc" id="attached_doc1" value="1" class="a" checked><label
+                                    for="attached_doc1">ไม่มี</label></li>
+                            {% else %}
+                                <li><input type="radio" name="attached_doc" id="attached_doc1" value="1" class="a"><label
+                                    for="attached_doc1">ไม่มี</label></li>
+                            {% endif %}
+                            {% if request_doc.has_attached_doc == True %}
+                                <li><input type="radio" name="attached_doc" id="attached_doc2" value="2" class="a" checked><label
+                                    for="attached_doc2">มี</label></li>
+                            {% else %}
+                                <li><input type="radio" name="attached_doc" id="attached_doc2" value="2" class="a"><label
+                                    for="attached_doc2">มี</label></li>
+                            {% endif %}
+                            <li>***กรุณาส่งไฟล์เอกสารไปที่ napawanpunakabutra@gmail.com หรือ jobchula@hotmail.com</li>
+                        </ul>
+                        <ul class="actions">
+                            <li>ผู้เสนอ:</li>
+                            <li><input type="text" name="request_name" size="30" maxlength="150" value="{{request_doc.request_name}}"
+                                    onFocus="select()" required></li>
+                            <li>ตำแหน่ง:</li>
+                            <li><input type="text" name="request_position" size="30" maxlength="150" value="{{request_doc.request_position}}"
+                                    onFocus="select()" required></li>
+                        </ul>
+                        <dl>
+                            <dd>
+                    </div>
+            </section>
+            <section id="two" class="wrapper style4">
+                <div class="content">
+                    <ul class="actions">
+                        <li>พิจารณาแล้วไม่ซ้ำซ้อนหรือคล้ายคลึงกับฟอร์ม/WI ที่ได้ขอรหัสแล้ว</li>
+                    </ul>
+                    <dl>
+                        <dd>
+                            <ul class="actions">
+                                {% if request_doc.approved == True %}
+                                <li><input type="radio" name="approved" id="approved1" value="1" class="a" checked><label
+                                    for="approved1">อนุมัติ</label></li>
+                                {% else %}
+                                <li><input type="radio" name="approved" id="approved1" value="1" class="a"><label
+                                    for="approved1">อนุมัติ</label></li>
+                                {% endif %}
+                                {% if request_doc.approved == False %}
+                                <li><input type="radio" name="approved" id="approved2" value="2" class="a" checked><label
+                                    for="approved2">ไม่อนุมัติ</label></li>
+                                {% else %}
+                                <li><input type="radio" name="approved" id="approved2" value="2" class="a"><label
+                                    for="approved2">ไม่อนุมัติ</label></li>
+                                {% endif %}
+                            </ul>
+                        </dd>
+                    </dl>
+                    </dd>
+                    </dl>
+                    <ul class="actions">
+                        <li>ผู้พิจารณา:</li>
+                        <li><input type="text" name="approved_name" size="30" maxlength="150" value="{{request_doc.approved_name}}"
+                                onFocus="select()" required></li>
+                        <li>ตำแหน่ง:</li>
+                        <li>ผู้จัดการคุณภาพ/ผู้จัดการวิชาการ</li>
+                    </ul>
+
+                </div>
+            </section>
+
+            <section id="three" class="wrapper style1">
+
+
+                <div class="content">
+
+                    <h4>สำหรับเจ้าหน้าที่ผู้ควบคุมเอกสาร</h4>
+                    <ul class="actions">
+                        {% if request_doc.response_type == 1 %}
+                        <li><input type="radio" id="response1" name="response" value="1" class="a" checked><label
+                            for="response1">ออกหมายเลขเอกสาร</label></li>
+                        {% else %}
+                        <li><input type="radio" id="response1" name="response" value="1" class="a"><label
+                            for="response1">ออกหมายเลขเอกสาร</label></li>
+                        {% endif %}
+                        <li><input type="text" name="response_code" size="60" maxlength="150" value=""
+                                onFocus="select()"></li>
+                    </ul>
+                    <ul class="actions">
+                        {% if request_doc.response_type == 2 %}
+                        <li><input type="radio" id="response2" name="response" value="2" class="a" checked><label
+                            for="response2">ยกเลิกเอกสารใน Master list</label></li>
+                        {% else %}
+                        <li><input type="radio" id="response2" name="response" value="2" class="a"><label
+                            for="response2">ยกเลิกเอกสารใน Master list</label></li>
+                        {% endif %}
+                    </ul>
+                    <ul class="actions">
+                        {% if request_doc.response_type == 3 %}
+                        <li><input type="radio" id="response3" name="response" value="3" class="a" checked><label
+                            for="response3">แก้ไขข้อมูลใน Master list</label></li>
+                        {% else %}
+                        <li><input type="radio" id="response3" name="response" value="3" class="a"><label
+                            for="response3">แก้ไขข้อมูลใน Master list</label></li>
+                        {% endif %}
+                        
+                    </ul>
+                    <ul class="actions">
+                        {% if request_doc.response_type == 4 %}
+                        <li><input type="radio" id="response4" name="response" value="4" class="a" checked><label
+                            for="response4">อื่นๆ:</label></li>
+                        {% else %}
+                        <li><input type="radio" id="response4" name="response" value="4" class="a"><label
+                            for="response4">อื่นๆ:</label></li>
+                        {% endif %}
+                        
+                        <li><input type="text" name="response_other" size="25" maxlength="150" value=""
+                                onFocus="select()"></li>
+                    </ul>
+                    <div class="row 200%">
+                        <div class="6u 12u$(medium)">
+                            &nbsp;
+                        </div>
+                        <div class="6u$ 12u$(medium)" align="center">
+                            <ul class="actions">
+                                <li><input type="text" name="response_name" size="30" maxlength="150" value="{{request_doc.response_name}}"
+                                        onFocus="select()"></li>
+                            </ul>
+                            <ul class="actions">
+                                <li>ผู้ควบคุมเอกสาร</li>
+                            </ul>
+                            <ul class="actions">
+                                {% if request_doc.response_date != '' %}
+                                <li>{{request_doc.response_date}}</li>
+                                {% else %}
+                                <li>{{current_date}}</li>
+                                {% endif %}
+                            </ul>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="four" class="wrapper style4">
+
+
+                <div class="content">
+
+                    <h4>ผู้เสนอ</h4>
+                    <ul class="actions">
+                        {% if request_doc.response_original_number == True %}
+                        <li><input type="checkbox" id="response_original_number" name="response_original_number" value="1" class="a" checked><label
+                            for="response_original_number">รับหมายเลขรหัสเพื่อจัดทำต้นฉบับ</label></li>
+                        {% else %}
+                        <li><input type="checkbox" id="response_original_number" name="response_original_number" value="1" class="a"><label
+                            for="response_original_number">รับหมายเลขรหัสเพื่อจัดทำต้นฉบับ</label></li>
+                        {% endif %}
+                        
+                    </ul>
+                    <div class="row 200%">
+                        <div class="6u 12u$(medium)">
+                            &nbsp;
+                        </div>
+                        <div class="6u$ 12u$(medium)" align="center">
+                            <ul class="actions">
+                                <li><input type="text" name="receive_name" size="30" maxlength="150" value="{{request_doc.receive_name}}"
+                                        onFocus="select()"></li>
+                            </ul>
+                            <ul class="actions">
+                                {% if request_doc.receive_date != '' %}
+                                <li>{{request_doc.receive_date}}</li>
+                                {% else %}
+                                <li>{{current_date}}</li>
+                                {% endif %}
+                            </ul>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="five" class="wrapper style1">
+
+
+                <div class="content">
+
+                    <h4>เจ้าหน้าที่ผู้ควบคุมเอกสาร</h4>
+                    <ul class="actions">
+                        {% if request_doc.control_type == 1 %}
+                        <li><input type="radio" id="control1" name="control" value="1" class="a" checked><label
+                            for="control1">รับเอกสารฉบับสมบูรณ์พร้อม File ข้อมูล</label></li>
+                        {% else %}
+                        <li><input type="radio" id="control1" name="control" value="1" class="a"><label
+                            for="control1">รับเอกสารฉบับสมบูรณ์พร้อม File ข้อมูล</label></li>
+                        {% endif %}
+                    </ul>
+                    <ul class="actions">
+                        {% if request_doc.control_type == 2 %}
+                        <li><input type="radio" id="control2" name="control" value="2" class="a" checked><label
+                            for="control2">จัดเก็บต้นฉบับเก่าและเรียกคืนสำเนา</label></li>
+                        {% else %}
+                        <li><input type="radio" id="control2" name="control" value="2" class="a"><label
+                            for="control2">จัดเก็บต้นฉบับเก่าและเรียกคืนสำเนา</label></li>
+                        {% endif %}
+                    </ul>
+                    <ul class="actions">
+                        {% if request_doc.control_type == 3 %}
+                        <li><input type="radio" id="control3" name="control" value="3" class="a" checked><label
+                            for="control3">ทำลายสำเนา</label></li>
+                        {% else %}
+                        <li><input type="radio" id="control3" name="control" value="3" class="a"><label
+                            for="control3">ทำลายสำเนา</label></li>
+                        {% endif %}
+                    </ul>
+                    <ul class="actions">
+                        {% if request_doc.control_type == 4 %}
+                        <li><input type="radio" id="control4" name="control" value="4" class="a" checked><label
+                            for="control4">สำเนาให้ผู้มีสิทธิ์ถือครองเอกสาร / ผู้ร้องขอ</label></li>
+                        {% else %}
+                        <li><input type="radio" id="control4" name="control" value="4" class="a"><label
+                            for="control4">สำเนาให้ผู้มีสิทธิ์ถือครองเอกสาร / ผู้ร้องขอ</label></li>
+                        {% endif %}
+                    </ul>
+                    <div class="row 200%">
+                        <div class="6u 12u$(medium)">
+                            &nbsp;
+                        </div>
+                        <div class="6u$ 12u$(medium)" align="center">
+                            <ul class="actions">
+                                <li><input type="text" name="control_name" size="30" maxlength="150" value="{{request_doc.control_name}}"
+                                        onFocus="select()"></li>
+                            </ul>
+                            <ul class="actions">
+                                {% if request_doc.control_date != '' %}
+                                <li>{{request_doc.control_date}}</li>
+                                {% else %}
+                                <li>{{current_date}}</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div align="center" class="d">
+                        {% if request_doc.id != None %}
+                            <input type="number" name="id" value="{{request_doc.id}}" hidden>
+                            <input type="submit" name="edit" value="เพิ่ม/แก้ไขข้อมูล" class="special">
+                        {% else %}
+                            <input type="submit" name="submit" value="Submit" class="special">
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </section>
+
+    </form>
+
+
+</BODY>
+
+</HTML>
