@@ -18,6 +18,9 @@ def signup(request):
         username = request.POST['username']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
+        if len(password1) < 5:
+            return render(request, 'signup.djt.html', context={'message': "รหัสผ่านต้องมี 5 ตัว"})
+        username = username.lower()
         if (password1 != password2):
             return render(request, 'signup.djt.html', context={'message': "รหัสผ่านต้องตรงกัน"})
         form = User.objects.create_user(username=username, password=password2)
@@ -103,7 +106,6 @@ def requestDoc(request):
                 return redirect("/login?next=" + "request-document?id=" + id)
             else:
                 return render(request, 'request_document.djt.html', context)
-            # return checkLogin(request, 'request_document.djt.html', context)
         else:
             now = datetime.datetime.now()
             context= {
@@ -113,7 +115,6 @@ def requestDoc(request):
                 return redirect("/login?next=" + "request-document")
             else:
                 return render(request, 'request_document.djt.html', context)
-            # return checkLogin(request, 'request_document.djt.html', context)
     else:
         now = datetime.datetime.now()
         context= {

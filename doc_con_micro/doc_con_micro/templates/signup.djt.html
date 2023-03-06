@@ -1,24 +1,3 @@
-{% comment %} {% extends 'base.html' %}
-
-{% block content %}
-  <h2>Sign up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
-        {% endfor %}
-      </p>
-    {% endfor %}
-    <button type="submit">Sign up</button>
-  </form>
-{% endblock %} {% endcomment %}
 <!DOCTYPE html>
 
 {% load static %}
@@ -56,7 +35,7 @@
                                 <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                 <div class="form-outline flex-fill mb-0">
                                   <input type="text" name="username" id="username" class="form-control" required />
-                                  <label class="form-label" for="form3Example1c">Username</label>
+                                  <label class="form-label" for="form3Example1c">Username (กรุณาใช้ตัวอักษรภาษาอังกฤษ)</label>
                                 </div>
                               </div>
         
@@ -64,7 +43,7 @@
                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                             <div class="form-outline flex-fill mb-0">
                               <input type="text" name="first_name" id="first_name" class="form-control" required/>
-                              <label class="form-label" for="form3Example1c">Name</label>
+                              <label class="form-label" for="form3Example1c">First Name (ชื่อ)</label>
                             </div>
                           </div>
 
@@ -72,14 +51,14 @@
                             <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                             <div class="form-outline flex-fill mb-0">
                               <input type="text" name="last_name" id="last_name" class="form-control" required/>
-                              <label class="form-label" for="form3Example1c">Lastname</label>
+                              <label class="form-label" for="form3Example1c">Last Name (นามสกุล)</label>
                             </div>
                           </div>
         
                           <div class="d-flex flex-row align-items-center mb-4">
                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                             <div class="form-outline flex-fill mb-0">
-                              <input type="email" name="email" id="email" class="form-control" />
+                              <input type="email" name="email" id="email" class="form-control" required/>
                               <label class="form-label" for="form3Example3c">Email</label>
                             </div>
                           </div>
@@ -88,7 +67,7 @@
                             <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                             <div class="form-outline flex-fill mb-0">
                               <input type="password" name="password1" id="password1" class="form-control" maxLength="5" required/>
-                              <label class="form-label" for="form3Example4c">Password</label>
+                              <label class="form-label" for="form3Example4c">Password (ระบุตัวเลข 5 ตัว)</label>
                             </div>
                           </div>
         
@@ -96,7 +75,7 @@
                             <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                             <div class="form-outline flex-fill mb-0">
                               <input type="password" name="password2" id="password2" class="form-control" maxLength="5" required/>
-                              <label class="form-label" for="form3Example4cd">Repeat your password</label>
+                              <label class="form-label" for="form3Example4cd">Repeat your password (รหัสเดียวกับด้านบน)</label>
                             </div>
                           </div>
         
