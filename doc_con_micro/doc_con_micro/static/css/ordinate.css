@@ -3447,3 +3447,12 @@ hr.major {
 	margin-right: 10px;
     margin-top: 10px;
 }
+
+.top_left {
+    position:fixed;
+    top: 0;
+	left: 0;
+    z-index: 100;
+	margin-left: 10px;
+    margin-top: 10px;
+}
