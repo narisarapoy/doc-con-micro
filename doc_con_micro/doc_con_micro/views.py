@@ -5,33 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Q
 from .models import Department, RequestDocument
-from .forms import SignUpForm
-from django.contrib.auth.models import User
 import datetime
 import uuid
-
-def signup(request):
-    if request.method == 'POST':
-        user = User.objects.filter(username=request.POST['username'])
-        if user.count() > 0:
-            return render(request, 'signup.djt.html', context={'message': "Username นี้มีผู้ใช้งานแล้ว"})
-        username = request.POST['username']
-        password1 = request.POST['password1']
-        password2 = request.POST['password2']
-        if (password1 != password2):
-            return render(request, 'signup.djt.html', context={'message': "รหัสผ่านต้องตรงกัน"})
-        form = User.objects.create_user(username=username, password=password2)
-        form.first_name = request.POST['first_name']
-        form.last_name = request.POST['last_name']
-        if 'email' in request.POST:
-            form.email = request.POST['email']
-        form.save()
-        user = authenticate(request, username=username, password=password2)
-        login(request, user)
-        return redirect('/documents')
-    else:
-        form = SignUpForm()
-    return render(request, 'signup.djt.html')
 
 def signIn(request):
     if request.method == "POST":
@@ -43,14 +18,11 @@ def signIn(request):
             username=username,
             password=password
         )
-        print(user)
+
         if user is not None:
             # Log user in
             login(request, user)
-            if 'next_page' not in request.POST:
-                return redirect("/documents")
             next_page = request.POST['next_page']
-            print(next_page)
             next_page = next_page.replace(".djt.html", "")
             next_page = "/" + next_page
             print(next_page)
@@ -87,6 +59,7 @@ def documents(request):
     context = {
         'request_doc_items': reversed(request_doc_items)
     }
+    logout(request)
     return render(request, 'documents.djt.html', context)
 
 def requestDoc(request):
@@ -102,6 +75,7 @@ def requestDoc(request):
             if request.user.is_authenticated == False:
                 return redirect("/login?next=" + "request-document?id=" + id)
             else:
+                logout(request)
                 return render(request, 'request_document.djt.html', context)
             # return checkLogin(request, 'request_document.djt.html', context)
         else:
@@ -112,6 +86,7 @@ def requestDoc(request):
             if request.user.is_authenticated == False:
                 return redirect("/login?next=" + "request-document")
             else:
+                logout(request)
                 return render(request, 'request_document.djt.html', context)
             # return checkLogin(request, 'request_document.djt.html', context)
     else:
@@ -129,7 +104,7 @@ def submitDoc(request):
         requestDoc = RequestDocument.objects.filter(id=request.POST['id'])[0]
         updateRequestDocument(request, requestDoc)
     
-    return redirect("/documents")
+    return redirect("/logout")
 
 def submitDepartment(request):
     for _topic in Department.objects.all():
