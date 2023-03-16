@@ -182,8 +182,8 @@ def updateRequestDocument(request, requestDoc):
     response_name = request.POST['response_name']
     response_date = ""
     if response_name != requestDoc.response_name or response_type != requestDoc.response_type or response_other != requestDoc.response_other:
-        if 'response_date' in request.POST:
-            response_date = request.POST['response_date']
+        now = datetime.datetime.now()
+        response_date = now.date().strftime("%d/%m/%Y")
 
     response_original_number = False
     if 'response_original_number' in request.POST:
@@ -199,8 +199,8 @@ def updateRequestDocument(request, requestDoc):
     receive_name = request.POST['receive_name']
     receive_date = ""
     if receive_name != requestDoc.receive_name or response_original_number != requestDoc.response_original_number:
-        if 'receive_date' in request.POST:
-            receive_date = request.POST['receive_date']
+        now = datetime.datetime.now()
+        receive_date = now.date().strftime("%d/%m/%Y")
     
     control_type = 0
     if 'control' in request.POST:
@@ -214,8 +214,8 @@ def updateRequestDocument(request, requestDoc):
     
     control_date = ""
     if control_type != requestDoc.control_type or control_name != requestDoc.control_name:
-        if 'control_date' in request.POST:
-            control_date = request.POST['control_date']
+        now = datetime.datetime.now()
+        control_date = now.date().strftime("%d/%m/%Y")
     if requestDoc.request_number_in_year == None:
         now = datetime.datetime.now()
         year = now.date().year
