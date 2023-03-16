@@ -97,9 +97,9 @@ def requestDoc(request):
         if request.GET.get('id') != None:
             id = request.GET.get('id')
             requestDoc = RequestDocument.objects.filter(id=id)
-            
+            now = datetime.datetime.now()
             context= {
-                'current_date': requestDoc[0].submit_date,
+                'current_date': now.date().strftime("%d/%m/%Y"),
                 'request_doc': requestDoc[0],
             }
             if request.user.is_authenticated == False:
