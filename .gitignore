@@ -1,3 +1,6 @@
+/.venv
 /venv
 /logs
 /doc_con_micro/static
+/doc_con_micro/doc_con_micro/__pycache__
+/doc_con_micro/doc_con_micro/migrations
